@@ -7,6 +7,7 @@ import useStyles from "./styles";
 import { RootState } from "../domain/entity/rootState";
 import { Address as IAddress } from "../domain/entity/address";
 import profileActions from "../store/profile/actions";
+import { isPostalCode } from "../domain/services/address";
 
 const Address = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,10 @@ const Address = () => {
     dispatch(profileActions.setAddress(member));
   }
 
+  const handlePostalcodeChange = (code: string) => {
+    if (!isPostalCode(code)) return;
+    dispatch(profileActions.setAddress({ postalcode: code }));
+  }
   return (
     <>
       <TextField
@@ -24,7 +29,7 @@ const Address = () => {
         className={classes.formField}
         label={PROFILE.ADDRESS.POSTALCODE}
         value={profile.address.postalcode}
-        onChange={e => handleAddressChange({ postalcode: e.target.value })}
+        onChange={e => handlePostalcodeChange(e.target.value )}
       />
       <TextField
         fullWidth
