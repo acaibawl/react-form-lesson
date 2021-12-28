@@ -5,7 +5,7 @@ export type Validation = {
   gender: string;
   address: {
     postalcode: string;
-    refecture: string;
+    prefecture: string;
     city: string;
     restAddress: string;
   };

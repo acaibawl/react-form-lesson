@@ -11,7 +11,7 @@ const init: ValidationState = {
     gender: "",
     address: {
       postalcode: "",
-      refecture: "",
+      prefecture: "",
       city: "",
       restAddress: "",
     },

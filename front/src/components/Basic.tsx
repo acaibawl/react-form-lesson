@@ -6,7 +6,8 @@ import {
    FormLabel,
    RadioGroup,
    FormControlLabel,
-   Radio
+   Radio,
+   FormHelperText
    } from "@material-ui/core";
 
 import useStyles from "./styles";
@@ -20,6 +21,7 @@ const Basic = () => {
   // useDispatch() はreduxの状態を更新するための関数を生成する
   const dispatch = useDispatch();
   const profile = useSelector((state: RootState) => state.profile);
+  const validation = useSelector((state: RootState) => state.validation);
   const classes = useStyles();
 
   // 更新したい項目だけ受け取ってreducerにdispatchする関数
@@ -33,19 +35,28 @@ const Basic = () => {
         fullWidth
         className={classes.formField}
         label={PROFILE.NAME}
+        required
+        error={!!validation.message.name}
+        helperText={validation.message.name}
         value={profile.name}
         onChange={e => handleChange({ name: e.target.value })}
       />
       <TextField
         fullWidth
         multiline
+        error={!!validation.message.description}
+        helperText={validation.message.description}
         className={classes.formField}
         rows={5}
         label={PROFILE.DESCRIPTION}
         value={profile.description}
         onChange={e => handleChange({ description: e.target.value })}
       />
-      <FormControl className={classes.formField}>
+      <FormControl
+        error={!!validation.message.gender}
+        required
+        className={classes.formField}
+      >
         <FormLabel>{PROFILE.GENDER}</FormLabel>
         <RadioGroup
           value={profile.gender}
@@ -65,6 +76,9 @@ const Basic = () => {
       </FormControl>
       <TextField
         fullWidth
+        required
+        error={!!validation.message.birthday}
+        helperText={validation.message.birthday}
         className={classes.formField}
         label={PROFILE.BIRTHDAY}
         type="date"
