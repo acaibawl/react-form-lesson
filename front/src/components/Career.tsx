@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { TextField, Grid, InputLabel, Typography, Button } from "@material-ui/core";
 import { PROFILE } from "../domain/services/profile";
+import { exitEmptyCareers } from "../domain/services/career";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../domain/entity/rootState";
 import { Career as ICareer } from "../domain/entity/career";
@@ -13,6 +14,7 @@ const Career = () => {
 
   const dispatch = useDispatch();
   const careers = useSelector((state: RootState) => state.profile.careers);
+  const isAbleToAddCareer = exitEmptyCareers(careers);
 
   const handleChange = (member: Partial<ICareer>, i: number) => {
     dispatch(profileActions.setCarrer({ career: member, index: i}));
@@ -21,6 +23,10 @@ const Career = () => {
   const handleAddCareer = () => {
     dispatch(profileActions.addCareer({}));
   };
+
+  const handleDeleteCareer = (i: number) => {
+    dispatch(profileActions.deleteCareer(i));
+  }
 
   return (
     <>
@@ -78,6 +84,15 @@ const Career = () => {
           </Grid>
         </Grid>
       </div>
+      <Button
+        className={classes.button}
+        onClick={() => handleDeleteCareer(i)}
+        fullWidth
+        variant="outlined"
+        color="secondary"
+      >
+        職歴 {i + 1} を削除
+      </Button>
         </Fragment>
       ))}
       <Button
@@ -85,6 +100,7 @@ const Career = () => {
         onClick={handleAddCareer}
         fullWidth
         variant="outlined"
+        disabled={isAbleToAddCareer}
       >
         職歴を追加
       </Button>
