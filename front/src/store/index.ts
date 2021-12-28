@@ -3,11 +3,13 @@ import thunk from "redux-thunk";
 import profileReducer from "./profile/reducer";
 import { RootState } from "../domain/entity/rootState";
 import collegeReducer from "./colleges/reducer";
+import validationReducer from "./validation/reducer";
 
 const store = createStore(
   combineReducers<RootState>({
     profile: profileReducer,
-    colleges: collegeReducer
+    colleges: collegeReducer,
+    validation: validationReducer
   }),
   compose(                                      // Redux Dev Toolとmiddlewareをまとめてstoreに登録する
     applyMiddleware(thunk),                     // redux-thunkという外部ライブラリをredux登録する
