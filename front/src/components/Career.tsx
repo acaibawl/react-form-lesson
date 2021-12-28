@@ -6,19 +6,24 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../domain/entity/rootState";
 import { Career as ICareer } from "../domain/entity/career";
 import profileActions from "../store/profile/actions";
+import { calculateValidation } from "../domain/services/validation";
+import validationActions from "../store/validation/actions";
 
 import useStyles from "./styles";
+import { profile } from "console";
 
 const Career = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
   const careers = useSelector((state: RootState) => state.profile.careers);
+  const profile = useSelector((state: RootState) => state.profile);
   const validation = useSelector((state: RootState) => state.validation);
   const isAbleToAddCareer = exitEmptyCareers(careers);
 
   const handleChange = (member: Partial<ICareer>, i: number) => {
     dispatch(profileActions.setCarrer({ career: member, index: i}));
+    recalculateValidation(member, i);
   }
 
   const handleAddCareer = () => {
@@ -28,6 +33,19 @@ const Career = () => {
   const handleDeleteCareer = (i: number) => {
     dispatch(profileActions.deleteCareer(i));
   }
+
+  const recalculateValidation = (member: Partial<ICareer>, i: number) => {
+    if(!validation.isStartValidation) return;
+
+    const newProfile = {
+      ...profile,
+      career: profile.careers.map((c, _i) =>
+        _i === i ? { ...c, ...member} : c
+      )
+    };
+    const message = calculateValidation(newProfile);
+    dispatch(validationActions.setValidation(message));
+  };
 
   return (
     <>

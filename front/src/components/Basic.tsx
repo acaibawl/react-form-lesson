@@ -16,6 +16,8 @@ import { Profile } from "../domain/entity/profile";
 import { PROFILE } from "../domain/services/profile";
 import { Gender } from "../domain/entity/gender";
 import profileActions from "../store/profile/actions";
+import { calculateValidation } from "../domain/services/validation";
+import validationActions from "../store/validation/actions";
 
 const Basic = () => {
   // useDispatch() はreduxの状態を更新するための関数を生成する
@@ -27,7 +29,21 @@ const Basic = () => {
   // 更新したい項目だけ受け取ってreducerにdispatchする関数
   const handleChange = (member: Partial<Profile>) => {
     dispatch(profileActions.setProfile(member));
+    recalculateValidation(member);
   };
+
+  const recalculateValidation = (member: Partial<Profile>) => {
+    // パリデーションのエラーを表示し始めていたらメッセージを再構築して更新
+    if(!validation.isStartValidation) return;
+
+    const newProfile = {
+      ...profile,
+      ...member
+    };
+
+    const message = calculateValidation(newProfile);
+    dispatch(validationActions.setValidation(message));
+  }
 
   return (
     <>
