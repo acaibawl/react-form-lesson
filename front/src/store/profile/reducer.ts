@@ -25,6 +25,10 @@ const profileReducer = reducerWithInitialState(init)
     // addressの内容だけ新しい状態で更新
     ...state,
     address: { ...state.address, ...payload}
+  }))
+  .case(profileActions.searchAddress.done, (state, payload) => ({
+    ...state,
+    address: { ...state.address, ...payload.result }
   })
 );
 

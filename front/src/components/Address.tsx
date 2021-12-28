@@ -8,6 +8,7 @@ import { RootState } from "../domain/entity/rootState";
 import { Address as IAddress } from "../domain/entity/address";
 import profileActions from "../store/profile/actions";
 import { isPostalCode } from "../domain/services/address";
+import { searchAddressFromPostalCode } from "../store/profile/effects";
 
 const Address = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const Address = () => {
   const handlePostalcodeChange = (code: string) => {
     if (!isPostalCode(code)) return;
     dispatch(profileActions.setAddress({ postalcode: code }));
+    dispatch(searchAddressFromPostalCode(code));
   }
   return (
     <>
