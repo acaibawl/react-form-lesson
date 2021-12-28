@@ -7,7 +7,8 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  FormHelperText
 } from "@material-ui/core";
 
 import { RootState } from "../domain/entity/rootState";
@@ -24,6 +25,7 @@ const College = () => {
   const dispatch = useDispatch();
   const colleges = useSelector((state: RootState) => state.colleges);
   const profile = useSelector((state: RootState) => state.profile);
+  const validation = useSelector((state: RootState) => state.validation);
   const classes = useStyles();
 
   const handleChange = (name: string) => {
@@ -97,7 +99,11 @@ const College = () => {
             value={profile.college.name}
             disabled
           />
-          <FormControl fullWidth className={classes.formField}>
+          <FormControl
+            error={!!validation.message.college.faculty}
+            fullWidth
+            className={classes.formField}
+          >
             <InputLabel>{PROFILE.COLLEGE.FACULTY}</InputLabel>
             <Select
               value={profile.college.faculty}
@@ -114,10 +120,13 @@ const College = () => {
                 </MenuItem>
               ))}
             </Select>
+            <FormHelperText>
+              {validation.message.college.faculty}
+            </FormHelperText>
           </FormControl>
           <div>{profile.college.name}が選択されています。</div>
           {currentFaculty?.department.length > 0 && (
-            <FormControl fullWidth className={classes.formField}>
+            <FormControl required fullWidth className={classes.formField}>
               <InputLabel>{PROFILE.COLLEGE.DEPARTMENT}</InputLabel>
               <Select
                 value={profile.college.department}
